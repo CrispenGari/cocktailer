@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
 import { Fonts } from "@/constants";
+import UrqlProvider from "@/providers/UrqlProvider";
 
 SplashScreen.preventAutoHideAsync();
 const InitialLayout = ({ children }: { children: React.ReactNode }) => {
@@ -17,7 +18,7 @@ const InitialLayout = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
 
-  return <>{children}</>;
+  return <UrqlProvider>{children}</UrqlProvider>;
 };
 
 const RootLayout = () => {

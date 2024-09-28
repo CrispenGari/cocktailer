@@ -3,8 +3,15 @@ import React from "react";
 import { SvgComponent } from "@/components/SvgComponent";
 import glasses from "@/assets/data/glasses.json";
 import { FONTS } from "@/constants";
+import { useQuery } from "urql";
+import { RecommendationQuery } from "@/tada";
 
 const Page = () => {
+  const [{ fetching, data }, refetchQuery] = useQuery({
+    query: RecommendationQuery,
+    variables: { input: { name: "Mimosa" } },
+  });
+  data?.recommendation;
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ fontFamily: FONTS.bold }}>Page</Text>

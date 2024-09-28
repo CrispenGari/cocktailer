@@ -16,3 +16,5 @@ export const FONTS = {
   regular: "MirzaRegular",
   bold: "MirzaBold",
 };
+
+export const SERVER_URL = "https://cocktailer.onrender.com/graphql";

@@ -1,0 +1,23 @@
+fragment ErrorFragment on Error {
+  field
+  message
+}
+
+fragment RecommendationFragment on Recommendation {
+  name
+  similarity
+}
+fragment RecommendationResponse on RecommendationResponse {
+  error {
+    ...ErrorFragment
+  }
+  recommendations {
+    ...RecommendationFragment
+  }
+}
+
+query Recommendation($input: RecommendationInput!) {
+  recommendation(input: $input) {
+    ...RecommendationResponse
+  }
+}
