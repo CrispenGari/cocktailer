@@ -4,14 +4,15 @@ import TypeWriter from "react-native-typewriter";
 import { COLORS, FONTS, remarks } from "@/constants";
 import Animated, {
   SlideInDown,
-  SlideInUp,
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNewUserStore } from "@/store/newUserStore";
 
 const Page = () => {
   const [index, setIndex] = React.useState(0);
+  const { toggle } = useNewUserStore();
 
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -19,6 +20,10 @@ const Page = () => {
     }, 6000);
     return () => clearInterval(id);
   }, []);
+
+  const openApp = () => {
+    toggle();
+  };
   return (
     <LinearGradient
       colors={[COLORS.main, COLORS.tertiary]}
@@ -95,6 +100,7 @@ const Page = () => {
             maxWidth: 300,
             alignItems: "center",
           }}
+          onPress={openApp}
         >
           <Text style={{ fontFamily: FONTS.regular, fontSize: 20 }}>
             Explore

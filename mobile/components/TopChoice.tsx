@@ -4,54 +4,12 @@ import { COLORS, FONTS } from "@/constants";
 import { SvgComponent } from "./SvgComponent";
 import glasses from "@/assets/data/glasses.json";
 import { LinearGradient } from "expo-linear-gradient";
-
-const cocktail = {
-  iba: true,
-  name: "Old Fashioned",
-  colors: ["#E74A03", "#F1A507"],
-  glass_and_ingredients: {
-    glass: "Old Fashioned",
-    ingredients: [
-      {
-        unit: "cl",
-        amount: 4.5,
-        ingredient: "Whiskey",
-        label: "Bourbon or rye whiskey",
-        abv: 40,
-        taste: null,
-      },
-      {
-        unit: null,
-        amount: "2 dashes",
-        ingredient: "Angostura bitters",
-        label: null,
-        abv: 44,
-        taste: "bitter",
-      },
-      {
-        unit: null,
-        amount: "1",
-        ingredient: "Sugar",
-        label: "Sugar cube",
-        abv: 0,
-        taste: "sweet",
-      },
-      {
-        unit: null,
-        amount: null,
-        ingredient: "Few dashes plain water",
-        label: null,
-        abv: null,
-        taste: null,
-      },
-    ],
-  },
-  category: "Before Dinner Cocktail",
-  garnish: "Orange slice and cherry",
-  preparation:
-    "Place sugar cube in old-fashioned glass and saturate with bitters, add a dash of plain water. Muddle until dissolve. Fill the glass with ice cubes and add whisky.",
-};
+import { useFavoritesStore } from "@/store/favoritesStore";
+import cocktails from "@/assets/data/cocktails.json";
+const shuffledCocktails = cocktails.sort(() => Math.random() - 0.5);
 const TopChoice = () => {
+  const { favorites } = useFavoritesStore();
+  const cocktail = favorites.length === 0 ? shuffledCocktails[0] : favorites[0];
   const colors =
     typeof cocktail.colors === "string"
       ? [cocktail.colors, cocktail.colors]

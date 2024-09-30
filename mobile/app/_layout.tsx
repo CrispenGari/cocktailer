@@ -6,7 +6,12 @@ import { Fonts } from "@/constants";
 import UrqlProvider from "@/providers/UrqlProvider";
 import { useNewUserStore } from "@/store/newUserStore";
 import { Asset } from "expo-asset";
+import { LogBox } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
+LogBox.ignoreLogs;
+LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
 const InitialLayout = () => {
   const [loaded, error] = useFonts(Fonts);
@@ -38,9 +43,13 @@ const InitialLayout = () => {
   }
 
   return (
-    <UrqlProvider>
-      <RootLayout />
-    </UrqlProvider>
+    <GestureHandlerRootView>
+      <BottomSheetModalProvider>
+        <UrqlProvider>
+          <RootLayout />
+        </UrqlProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
 
