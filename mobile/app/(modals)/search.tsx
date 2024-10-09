@@ -1,17 +1,122 @@
-import { View, Text } from "react-native";
+import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { COLORS } from "@/constants";
-import { Stack } from "expo-router";
-import SearchInput from "@/components/SearchInput";
+import { cocktails, COLORS, FONTS } from "@/constants";
+import { useSearchTermsStore } from "@/store/searchTerms";
+import { useSearchHistoryStore } from "@/store/searchHistoryStore";
+import { HistoryItem, ResultItem } from "@/components/SearchItem";
 
 const Page = () => {
+  const { query } = useSearchTermsStore();
+  const [limits, setLimits] = React.useState({
+    history: 11,
+    results: 11,
+  });
+  const { searches } = useSearchHistoryStore();
+  const results = cocktails.filter((c) =>
+    c.name.toLowerCase().includes(query.search.trim().toLowerCase())
+  );
+
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.primary, padding: 10 }}>
-      <Text>Search Results</Text>
-      {/* Header */}
-      {/* Form */}
-      {/* results */}
-    </View>
+    <>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: COLORS.primary, padding: 10 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        {!!query.search ? (
+          results.length === 0 ? (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+              }}
+            >
+              <Text style={{ fontFamily: FONTS.regular, textAlign: "center" }}>
+                No matches for the query "{query.search}".
+              </Text>
+            </View>
+          ) : (
+            results
+              .slice(0, limits.results)
+              .map((cocktail, index) => (
+                <ResultItem key={index} cocktail={cocktail as any} />
+              ))
+          )
+        ) : searches.length === 0 ? (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <Text style={{ fontFamily: FONTS.regular, textAlign: "center" }}>
+              Search Cocktails
+            </Text>
+          </View>
+        ) : (
+          searches
+            .slice(0, limits.results)
+            .map((cocktail, index) => (
+              <HistoryItem key={index} cocktail={cocktail as any} />
+            ))
+        )}
+
+        {query.search ? (
+          results.length > limits.results ? (
+            <TouchableOpacity
+              onPress={() =>
+                setLimits((s) => ({
+                  ...s,
+                  results: s.results + 10,
+                }))
+              }
+              style={{ marginVertical: 10, alignSelf: "center" }}
+            >
+              <Text
+                style={{
+                  fontFamily: FONTS.bold,
+                  textDecorationLine: "underline",
+                }}
+              >
+                Load More Results
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <Text
+              style={{
+                fontFamily: FONTS.bold,
+                textDecorationLine: "underline",
+              }}
+            ></Text>
+          )
+        ) : searches.length > limits.history ? (
+          <TouchableOpacity
+            onPress={() =>
+              setLimits((s) => ({
+                ...s,
+                history: s.history + 10,
+              }))
+            }
+            style={{ marginVertical: 10, alignSelf: "center" }}
+          >
+            <Text
+              style={{
+                fontFamily: FONTS.bold,
+                textDecorationLine: "underline",
+              }}
+            >
+              Load More Histories
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Text
+            style={{ fontFamily: FONTS.bold, textDecorationLine: "underline" }}
+          ></Text>
+        )}
+      </ScrollView>
+    </>
   );
 };
 

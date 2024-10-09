@@ -30,6 +30,8 @@ export const STORAGE_NAMES = {
   SETTINGS: "settings:",
   FAVORITES: "favorites:",
   NEW_TO_APP: "new:",
+  SEARCH_HISTORY: "search_history:",
+  SEARCH_TERMS: "search_terms:",
 };
 
 export const remarks = [

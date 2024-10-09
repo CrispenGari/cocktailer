@@ -14,6 +14,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import SearchInput from "@/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
+import { useSearchTermsStore } from "@/store/searchTerms";
 
 LogBox.ignoreLogs;
 LogBox.ignoreAllLogs();
@@ -62,6 +63,7 @@ export default InitialLayout;
 const RootLayout = () => {
   const router = useRouter();
   const { new: isNew } = useNewUserStore();
+  const { query, update } = useSearchTermsStore();
   React.useEffect(() => {
     if (!isNew) {
       router.replace("/(tabs)");
@@ -93,7 +95,14 @@ const RootLayout = () => {
           navigationBarHidden: true,
           headerShadowVisible: false,
           headerShown: true,
-          header: () => <SearchInput />,
+          header: () => (
+            <SearchInput
+              text={query.search}
+              onChangeText={(text) => {
+                update({ ...query, search: text });
+              }}
+            />
+          ),
         }}
         name="(modals)/search"
       />

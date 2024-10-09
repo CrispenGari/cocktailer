@@ -1,4 +1,10 @@
-import { View, SafeAreaView, TextInput, Platform } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  TextInput,
+  Platform,
+  Keyboard,
+} from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -12,14 +18,14 @@ import Animated, {
 import { useRouter } from "expo-router";
 import { COLORS, FONTS } from "@/constants";
 
-const SearchInput = () => {
+interface Props {
+  onChangeText: (text: string) => void;
+  text: string;
+}
+const SearchInput = ({ onChangeText, text }: Props) => {
   const router = useRouter();
   const { top } = useSafeAreaInsets();
 
-  const [state, setState] = React.useState({
-    query: "",
-    focused: false,
-  });
   const scale = useSharedValue(0);
 
   const startZoomIn = React.useCallback(() => {
@@ -120,13 +126,14 @@ const SearchInput = () => {
               onFocus={onFocus}
               onBlur={onBlur}
               ref={textInputRef}
-              value={state.query}
-              onChangeText={(query) => setState((s) => ({ ...s, query }))}
+              value={text}
+              onChangeText={onChangeText}
             />
             <TouchableOpacity
               style={{}}
               onPress={() => {
-                setState((s) => ({ ...s, query: "" }));
+                onChangeText("");
+                Keyboard.dismiss();
                 textInputRef.current?.blur();
               }}
             >
