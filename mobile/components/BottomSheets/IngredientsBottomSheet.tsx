@@ -1,4 +1,10 @@
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import React from "react";
 import { COLORS, FONTS } from "@/constants";
 import {
@@ -63,7 +69,7 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
         )}
       >
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
-          <BottomSheetView style={{ flexDirection: "row", gap: 10 }}>
+          <TouchableOpacity style={{ flexDirection: "row", gap: 10 }}>
             <LinearGradient
               colors={colors}
               style={{
@@ -115,7 +121,7 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
                 {cocktail.category}
               </Text>
             </BottomSheetView>
-          </BottomSheetView>
+          </TouchableOpacity>
           <BottomSheetView style={{ paddingTop: 10 }}>
             <Text
               style={{
@@ -144,6 +150,15 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
                     >
                       <Text style={{ fontFamily: FONTS.bold, fontSize: 12 }}>
                         {ingredient.abv || 0}%
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: FONTS.regular,
+                          color: COLORS.tertiary,
+                          fontSize: 10,
+                        }}
+                      >
+                        abv
                       </Text>
                     </View>
                     <BottomSheetView style={{ flex: 1 }}>
@@ -229,6 +244,22 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
             </TouchableOpacity>
           </Animated.View>
         </BottomSheetView>
+        <SafeAreaView>
+          <View style={{ padding: 10, paddingBottom: 0 }}>
+            <Text
+              style={{
+                marginBottom: 25,
+                fontFamily: FONTS.regular,
+                color: COLORS.tertiary,
+                textAlign: "center",
+              }}
+            >
+              {liked
+                ? "You liked this cocktail."
+                : "This cocktail is not in your favorites."}
+            </Text>
+          </View>
+        </SafeAreaView>
       </BottomSheetModal>
     );
   }

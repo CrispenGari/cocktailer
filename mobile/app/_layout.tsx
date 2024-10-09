@@ -1,14 +1,15 @@
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
-import { Fonts } from "@/constants";
+import { COLORS, FONTS, Fonts } from "@/constants";
 import UrqlProvider from "@/providers/UrqlProvider";
 import { useNewUserStore } from "@/store/newUserStore";
 import { Asset } from "expo-asset";
-import { LogBox } from "react-native";
+import { LogBox, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import SearchInput from "@/components/SearchInput";
 
 LogBox.ignoreLogs;
 LogBox.ignoreAllLogs();
@@ -56,23 +57,60 @@ const InitialLayout = () => {
 export default InitialLayout;
 const RootLayout = () => {
   const router = useRouter();
-  const segments = useSegments();
   const { new: isNew } = useNewUserStore();
   React.useEffect(() => {
-    const inTabsGroup = segments[0] === "(tabs)";
-    if (!isNew && !inTabsGroup) {
-      router.replace("/(tabs)/");
-    } else if (isNew && inTabsGroup) {
+    if (!isNew) {
+      router.replace("/(tabs)");
+    } else {
       router.replace("/");
     }
-  }, [isNew, segments]);
+  }, [isNew]);
   return (
     <Stack
+      initialRouteName="index"
       screenOptions={{
         headerShown: false,
       }}
     >
       <Stack.Screen name="index" />
+      <Stack.Screen
+        options={{
+          presentation: Platform.select({
+            ios: "modal",
+            android: "fullScreenModal",
+          }),
+          headerTitleStyle: {
+            fontFamily: FONTS.bold,
+            fontSize: 24,
+            color: COLORS.black,
+          },
+          headerStyle: { backgroundColor: COLORS.primary },
+          headerTitleAlign: "center",
+          navigationBarHidden: true,
+          headerShadowVisible: false,
+          headerShown: true,
+          header: () => <SearchInput />,
+        }}
+        name="(modals)/search"
+      />
+      <Stack.Screen
+        options={{
+          presentation: Platform.select({
+            ios: "modal",
+            android: "fullScreenModal",
+          }),
+          headerTitleStyle: {
+            fontFamily: FONTS.bold,
+            fontSize: 24,
+            color: COLORS.black,
+          },
+          headerStyle: { backgroundColor: COLORS.primary },
+          headerTitleAlign: "center",
+          navigationBarHidden: true,
+          headerShadowVisible: false,
+        }}
+        name="(modals)/[cocktail]"
+      />
     </Stack>
   );
 };

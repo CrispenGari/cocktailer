@@ -4,10 +4,15 @@ import { COLORS } from "@/constants";
 import TopChoice from "@/components/TopChoice";
 import Suggestions from "@/components/Suggestions";
 import Browse from "@/components/Browse";
-
 const Page = () => {
   return (
-    <ScrollView style={{ backgroundColor: COLORS.primary }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ backgroundColor: COLORS.primary }}
+      contentContainerStyle={{
+        paddingBottom: 100,
+      }}
+    >
       <TopChoice />
       <Suggestions />
       <Browse />

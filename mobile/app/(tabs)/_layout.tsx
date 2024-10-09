@@ -3,6 +3,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants";
+import CocktailsHeader from "@/components/Headers/CocktailsHeader";
 
 const Layout = () => {
   const width = 350;
@@ -22,7 +23,6 @@ const Layout = () => {
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: COLORS.tertiary,
         tabBarInactiveTintColor: COLORS.secondary,
-        headerShown: true,
         tabBarLabelStyle: {
           fontFamily: FONTS.bold,
           marginTop: width >= 600 ? 10 : -10,
@@ -37,6 +37,7 @@ const Layout = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wine-outline" color={color} size={size} />
           ),
+          header: () => <CocktailsHeader />,
         }}
       />
       <Tabs.Screen

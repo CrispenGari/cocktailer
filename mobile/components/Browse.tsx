@@ -1,18 +1,48 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { FONTS } from "@/constants";
+import { COLORS, FONTS } from "@/constants";
+import cocktails from "@/assets/data/cocktails.json";
+import { ListCocktail } from "./Cocktail";
 
 const Browse = () => {
+  const [limit, setLimit] = React.useState(11);
   return (
-    <View style={{ padding: 10 }}>
-      <Text
-        style={{
-          fontFamily: FONTS.bold,
-          fontSize: 20,
-        }}
-      >
-        Explore More
-      </Text>
+    <View style={{ padding: 10, gap: 3 }}>
+      <View style={{ marginBottom: 15 }}>
+        <Text
+          style={{
+            fontFamily: FONTS.bold,
+            fontSize: 20,
+          }}
+        >
+          Explore More
+        </Text>
+        <Text style={{ color: COLORS.tertiary, fontFamily: FONTS.regular }}>
+          A list of cocktails available.
+        </Text>
+      </View>
+      {cocktails.slice(0, limit).map((cocktail, index) => (
+        <ListCocktail key={index} cocktail={cocktail as any} />
+      ))}
+
+      {cocktails.length > limit ? (
+        <TouchableOpacity
+          onPress={() => setLimit((l) => l + 10)}
+          style={{ marginVertical: 10, alignSelf: "center" }}
+        >
+          <Text
+            style={{ fontFamily: FONTS.bold, textDecorationLine: "underline" }}
+          >
+            Load More
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <Text
+          style={{ fontFamily: FONTS.bold, textDecorationLine: "underline" }}
+        >
+          No more cocktails available.
+        </Text>
+      )}
     </View>
   );
 };

@@ -104,7 +104,7 @@ const Cocktail = ({
                 fontFamily: FONTS.regular,
               }}
             >
-              {cocktail.category}
+              {cocktail.category || "None"}
             </Text>
           </View>
         </View>
@@ -125,7 +125,10 @@ const Cocktail = ({
             .map((ingredient, key) => {
               const volume = (ingredient.amount || 0) * 10;
               return (
-                <View key={key} style={{ flexDirection: "row", gap: 5 }}>
+                <View
+                  key={key}
+                  style={{ flexDirection: "row", marginBottom: 3 }}
+                >
                   <View
                     style={{
                       backgroundColor:
@@ -139,6 +142,15 @@ const Cocktail = ({
                   >
                     <Text style={{ fontFamily: FONTS.bold, fontSize: 12 }}>
                       {ingredient.abv || 0}%
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONTS.regular,
+                        color: COLORS.tertiary,
+                        fontSize: 10,
+                      }}
+                    >
+                      abv
                     </Text>
                   </View>
                   <View style={{ flex: 1 }}>
@@ -317,5 +329,110 @@ export const CocktailSkeleton = ({ index }: { index: number }) => {
         />
       </View>
     </View>
+  );
+};
+
+export const ListCocktail = ({ cocktail }: { cocktail: TCocktail }) => {
+  const colors =
+    typeof cocktail.colors === "string"
+      ? [cocktail.colors, cocktail.colors]
+      : cocktail.colors.length === 1
+      ? [cocktail.colors[0], cocktail.colors[0]]
+      : cocktail.colors;
+
+  const [liked, setLiked] = React.useState(false);
+  const { add, favorites, remove } = useFavoritesStore();
+  React.useEffect(() => {
+    const foundInLikes = favorites.find((l) => l.name === cocktail.name);
+    setLiked(!!foundInLikes);
+  }, [favorites, cocktail]);
+  const likeOrUnlike = () => {
+    if (liked) {
+      remove(cocktail);
+    } else {
+      add(cocktail);
+    }
+  };
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: "row",
+        gap: 10,
+        backgroundColor: COLORS.main,
+        padding: 10,
+        borderRadius: 5,
+      }}
+    >
+      <View style={{ flexDirection: "row", gap: 10, flex: 1 }}>
+        <LinearGradient
+          colors={colors}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            minWidth: 50,
+            height: 50,
+            backgroundColor: COLORS.main,
+            borderRadius: 10,
+          }}
+          start={{
+            x: 0,
+            y: 1,
+          }}
+          end={{
+            x: 0,
+            y: 0,
+          }}
+        >
+          <SvgComponent
+            d={
+              // @ts-expect-error
+              glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]
+                ?.d
+            }
+            fill={COLORS.white}
+            height={30}
+            width={30}
+            stroke={COLORS.black}
+            strokeWidth={StyleSheet.hairlineWidth}
+          />
+        </LinearGradient>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontFamily: FONTS.bold,
+              fontSize: 18,
+              textDecorationLine: "underline",
+            }}
+          >
+            {cocktail.name}
+          </Text>
+          <Text
+            style={{
+              fontFamily: FONTS.regular,
+            }}
+          >
+            {cocktail.category || "None"}
+          </Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={{
+          alignSelf: "flex-end",
+          width: 40,
+          height: 40,
+          backgroundColor: COLORS.primary,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 40,
+        }}
+        onPress={likeOrUnlike}
+      >
+        <Ionicons
+          name={liked ? "thumbs-up" : "thumbs-up-outline"}
+          size={24}
+          color={COLORS.tertiary}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
