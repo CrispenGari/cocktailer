@@ -6,9 +6,11 @@ import glasses from "@/assets/data/glasses.json";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import cocktails from "@/assets/data/cocktails.json";
+import { useRouter } from "expo-router";
 const shuffledCocktails = cocktails.sort(() => Math.random() - 0.5);
 const TopChoice = () => {
   const { favorites } = useFavoritesStore();
+  const router = useRouter();
   const cocktail = favorites.length === 0 ? shuffledCocktails[0] : favorites[0];
   const colors =
     typeof cocktail.colors === "string"
@@ -18,6 +20,14 @@ const TopChoice = () => {
       : cocktail.colors;
   return (
     <TouchableOpacity
+      onPress={() => {
+        router.push({
+          pathname: "/(modals)/[cocktail]",
+          params: {
+            cocktail: cocktail.name,
+          },
+        });
+      }}
       style={{
         width: "100%",
         height: 200,

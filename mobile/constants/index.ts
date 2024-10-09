@@ -1,3 +1,9 @@
+import c from "@/assets/data/cocktails.json";
+import g from "@/assets/data/glasses.json";
+
+export const cocktails = c;
+export const glasses = g;
+
 export const COLORS = {
   main: "#EDDFE0",
   primary: "#F5F5F7",

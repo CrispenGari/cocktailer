@@ -8,8 +8,12 @@ import { useNewUserStore } from "@/store/newUserStore";
 import { Asset } from "expo-asset";
 import { LogBox, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModalProvider,
+  TouchableOpacity,
+} from "@gorhom/bottom-sheet";
 import SearchInput from "@/components/SearchInput";
+import { Ionicons } from "@expo/vector-icons";
 
 LogBox.ignoreLogs;
 LogBox.ignoreAllLogs();
@@ -108,6 +112,20 @@ const RootLayout = () => {
           headerTitleAlign: "center",
           navigationBarHidden: true,
           headerShadowVisible: false,
+          headerShown: true,
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              style={{
+                marginRight: 20,
+              }}
+              activeOpacity={0.7}
+              onPress={async () => {
+                router.back();
+              }}
+            >
+              <Ionicons name="close-outline" size={30} color={COLORS.black} />
+            </TouchableOpacity>
+          ),
         }}
         name="(modals)/[cocktail]"
       />

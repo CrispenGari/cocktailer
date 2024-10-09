@@ -12,14 +12,16 @@ import {
   BottomSheetBackdrop,
   BottomSheetView,
   BottomSheetFlatList,
+  useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { TCocktail } from "@/types";
-import { SvgComponent } from "../SvgComponent";
-import { LinearGradient } from "expo-linear-gradient";
+
 import glasses from "@/assets/data/glasses.json";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import Animated, { SlideInDown } from "react-native-reanimated";
+import CocktailGlass from "../CocktailGlass";
+import { useRouter } from "expo-router";
 
 interface Props {
   cocktail: TCocktail;
@@ -27,6 +29,7 @@ interface Props {
 }
 const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
   ({ cocktail, secondary }, ref) => {
+    const { dismiss } = useBottomSheetModal();
     const colors =
       typeof cocktail.colors === "string"
         ? [cocktail.colors, cocktail.colors]
@@ -35,6 +38,7 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
         : cocktail.colors;
 
     const snapPoints = React.useMemo(() => ["60%"], []);
+    const router = useRouter();
 
     const [liked, setLiked] = React.useState(false);
     const { add, favorites, remove } = useFavoritesStore();
@@ -69,40 +73,27 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
         )}
       >
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
-          <TouchableOpacity style={{ flexDirection: "row", gap: 10 }}>
-            <LinearGradient
+          <TouchableOpacity
+            onPress={() => {
+              dismiss();
+              router.push({
+                pathname: "/(modals)/[cocktail]",
+                params: {
+                  cocktail: cocktail.name,
+                },
+              });
+            }}
+            style={{ flexDirection: "row", gap: 10 }}
+          >
+            <CocktailGlass
               colors={colors}
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                minWidth: 50,
-                height: 50,
-                backgroundColor: COLORS.main,
-                borderRadius: 10,
-              }}
-              start={{
-                x: 0,
-                y: 1,
-              }}
-              end={{
-                x: 0,
-                y: 0,
-              }}
-            >
-              <SvgComponent
-                d={
-                  // @ts-expect-error
-                  glasses[
-                    cocktail.glass_and_ingredients.glass.replace(/\s/m, "")
-                  ]?.d
-                }
-                fill={COLORS.white}
-                height={30}
-                width={30}
-                stroke={COLORS.black}
-                strokeWidth={StyleSheet.hairlineWidth}
-              />
-            </LinearGradient>
+              d={
+                // @ts-expect-error
+                glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]
+                  ?.d
+              }
+            />
+
             <BottomSheetView style={{ flex: 1 }}>
               <Text
                 style={{

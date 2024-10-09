@@ -2,7 +2,6 @@ import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import React from "react";
 import { COLORS, FONTS } from "@/constants";
 import { TCocktail } from "@/types";
-import { LinearGradient } from "expo-linear-gradient";
 import { SvgComponent } from "./SvgComponent";
 import glasses from "@/assets/data/glasses.json";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,6 +9,8 @@ import { useFavoritesStore } from "@/store/favoritesStore";
 import ContentLoader from "./ContentLoader";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import IngredientsBottomSheet from "./BottomSheets/IngredientsBottomSheet";
+import { useRouter } from "expo-router";
+import CocktailGlass from "./CocktailGlass";
 
 const Cocktail = ({
   cocktail,
@@ -18,6 +19,7 @@ const Cocktail = ({
   cocktail: TCocktail;
   index: number;
 }) => {
+  const router = useRouter();
   const colors =
     typeof cocktail.colors === "string"
       ? [cocktail.colors, cocktail.colors]
@@ -55,40 +57,25 @@ const Cocktail = ({
           width: 300,
           height: 380,
         }}
+        onPress={() => {
+          router.push({
+            pathname: "/(modals)/[cocktail]",
+            params: {
+              cocktail: cocktail.name,
+            },
+          });
+        }}
       >
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <LinearGradient
+          <CocktailGlass
             colors={colors}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              minWidth: 50,
-              height: 50,
-              backgroundColor: COLORS.main,
-              borderRadius: 10,
-            }}
-            start={{
-              x: 0,
-              y: 1,
-            }}
-            end={{
-              x: 0,
-              y: 0,
-            }}
-          >
-            <SvgComponent
-              d={
-                // @ts-expect-error
-                glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]
-                  ?.d
-              }
-              fill={COLORS.white}
-              height={30}
-              width={30}
-              stroke={COLORS.black}
-              strokeWidth={StyleSheet.hairlineWidth}
-            />
-          </LinearGradient>
+            d={
+              // @ts-expect-error
+              glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]
+                ?.d
+            }
+          />
+
           <View style={{ flex: 1 }}>
             <Text
               style={{
@@ -127,7 +114,7 @@ const Cocktail = ({
               return (
                 <View
                   key={key}
-                  style={{ flexDirection: "row", marginBottom: 3 }}
+                  style={{ flexDirection: "row", marginBottom: 3, gap: 5 }}
                 >
                   <View
                     style={{
@@ -333,6 +320,7 @@ export const CocktailSkeleton = ({ index }: { index: number }) => {
 };
 
 export const ListCocktail = ({ cocktail }: { cocktail: TCocktail }) => {
+  const router = useRouter();
   const colors =
     typeof cocktail.colors === "string"
       ? [cocktail.colors, cocktail.colors]
@@ -362,40 +350,23 @@ export const ListCocktail = ({ cocktail }: { cocktail: TCocktail }) => {
         padding: 10,
         borderRadius: 5,
       }}
+      onPress={() => {
+        router.push({
+          pathname: "/(modals)/[cocktail]",
+          params: {
+            cocktail: cocktail.name,
+          },
+        });
+      }}
     >
       <View style={{ flexDirection: "row", gap: 10, flex: 1 }}>
-        <LinearGradient
+        <CocktailGlass
           colors={colors}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            minWidth: 50,
-            height: 50,
-            backgroundColor: COLORS.main,
-            borderRadius: 10,
-          }}
-          start={{
-            x: 0,
-            y: 1,
-          }}
-          end={{
-            x: 0,
-            y: 0,
-          }}
-        >
-          <SvgComponent
-            d={
-              // @ts-expect-error
-              glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]
-                ?.d
-            }
-            fill={COLORS.white}
-            height={30}
-            width={30}
-            stroke={COLORS.black}
-            strokeWidth={StyleSheet.hairlineWidth}
-          />
-        </LinearGradient>
+          d={
+            // @ts-expect-error
+            glasses[cocktail.glass_and_ingredients.glass.replace(/\s/m, "")]?.d
+          }
+        />
         <View style={{ flex: 1 }}>
           <Text
             style={{
