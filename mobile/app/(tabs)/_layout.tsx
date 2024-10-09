@@ -4,6 +4,7 @@ import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants";
 import CocktailsHeader from "@/components/Headers/CocktailsHeader";
+import FavoritesHeader from "@/components/Headers/FavoritesHeader";
 
 const Layout = () => {
   const width = 350;
@@ -47,6 +48,7 @@ const Layout = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="heart-outline" color={color} size={size} />
           ),
+          header: () => <FavoritesHeader />,
         }}
       />
       <Tabs.Screen

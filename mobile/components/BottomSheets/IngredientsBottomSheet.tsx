@@ -1,12 +1,6 @@
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { Text, View, TouchableOpacity, SafeAreaView } from "react-native";
 import React from "react";
-import { COLORS, FONTS } from "@/constants";
+import { COLORS, FONTS, glasses } from "@/constants";
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
@@ -16,7 +10,6 @@ import {
 } from "@gorhom/bottom-sheet";
 import { TCocktail } from "@/types";
 
-import glasses from "@/assets/data/glasses.json";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import Animated, { SlideInDown } from "react-native-reanimated";

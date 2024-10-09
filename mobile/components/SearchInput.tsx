@@ -21,8 +21,9 @@ import { COLORS, FONTS } from "@/constants";
 interface Props {
   onChangeText: (text: string) => void;
   text: string;
+  placeholder: string;
 }
-const SearchInput = ({ onChangeText, text }: Props) => {
+const SearchInput = ({ onChangeText, text, placeholder }: Props) => {
   const router = useRouter();
   const { top } = useSafeAreaInsets();
 
@@ -122,7 +123,7 @@ const SearchInput = ({ onChangeText, text }: Props) => {
                 paddingHorizontal: 10,
               }}
               placeholderTextColor={COLORS.black}
-              placeholder="Search Cocktails"
+              placeholder={placeholder}
               onFocus={onFocus}
               onBlur={onBlur}
               ref={textInputRef}

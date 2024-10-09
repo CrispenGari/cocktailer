@@ -2,8 +2,12 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "./storage";
 import { STORAGE_NAMES } from "@/constants";
-
-type TSettings = {};
+export type TOrder = "desc" | "asc";
+export type TSettings = {
+  haptics: boolean;
+  sound: boolean;
+  order: TOrder;
+};
 
 interface TSettingsState {
   settings: TSettings;
@@ -11,7 +15,11 @@ interface TSettingsState {
   restore: () => void;
 }
 
-const initialSettings = {} satisfies TSettings;
+const initialSettings = {
+  haptics: true,
+  sound: true,
+  order: "asc",
+} satisfies TSettings;
 
 export const useSettingsStore = create<TSettingsState>()(
   persist(

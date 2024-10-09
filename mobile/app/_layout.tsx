@@ -97,6 +97,7 @@ const RootLayout = () => {
           headerShown: true,
           header: () => (
             <SearchInput
+              placeholder="Search Cocktails"
               text={query.search}
               onChangeText={(text) => {
                 update({ ...query, search: text });
@@ -105,6 +106,35 @@ const RootLayout = () => {
           ),
         }}
         name="(modals)/search"
+      />
+
+      <Stack.Screen
+        options={{
+          presentation: Platform.select({
+            ios: "modal",
+            android: "fullScreenModal",
+          }),
+          headerTitleStyle: {
+            fontFamily: FONTS.bold,
+            fontSize: 24,
+            color: COLORS.black,
+          },
+          headerStyle: { backgroundColor: COLORS.primary },
+          headerTitleAlign: "center",
+          navigationBarHidden: true,
+          headerShadowVisible: false,
+          headerShown: true,
+          header: () => (
+            <SearchInput
+              placeholder="Search Favorites"
+              text={query.favorites}
+              onChangeText={(text) => {
+                update({ ...query, favorites: text });
+              }}
+            />
+          ),
+        }}
+        name="(modals)/search-favorites"
       />
       <Stack.Screen
         options={{
