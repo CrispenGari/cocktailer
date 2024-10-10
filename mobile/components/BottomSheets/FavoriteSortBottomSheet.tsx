@@ -8,6 +8,7 @@ import {
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { TOrder, useSettingsStore } from "@/store/settingsStore";
+import { onImpact } from "@/utils";
 
 interface Props {}
 const FavoriteSortBottomSheet = React.forwardRef<BottomSheetModal, Props>(
@@ -61,7 +62,12 @@ const FavoriteSortBottomSheet = React.forwardRef<BottomSheetModal, Props>(
           ].map((order) => (
             <TouchableOpacity
               key={order.order}
-              onPress={() => updateOrder(order.order as TOrder)}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                updateOrder(order.order as TOrder);
+              }}
               style={{
                 gap: 10,
                 flexDirection: "row",

@@ -15,6 +15,8 @@ import { useFavoritesStore } from "@/store/favoritesStore";
 import Animated, { SlideInDown } from "react-native-reanimated";
 import CocktailGlass from "../CocktailGlass";
 import { useRouter } from "expo-router";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 interface Props {
   cocktail: TCocktail;
@@ -35,11 +37,15 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
 
     const [liked, setLiked] = React.useState(false);
     const { add, favorites, remove } = useFavoritesStore();
+    const { settings } = useSettingsStore();
     React.useEffect(() => {
       const foundInLikes = favorites.find((l) => l.name === cocktail.name);
       setLiked(!!foundInLikes);
     }, [favorites, cocktail]);
-    const likeOrUnlike = () => {
+    const likeOrUnlike = async () => {
+      if (settings.haptics) {
+        await onImpact();
+      }
       if (liked) {
         remove(cocktail);
       } else {
@@ -67,7 +73,10 @@ const IngredientsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
       >
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
           <TouchableOpacity
-            onPress={() => {
+            onPress={async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
               dismiss();
               router.push({
                 pathname: "/(modals)/[cocktail]",

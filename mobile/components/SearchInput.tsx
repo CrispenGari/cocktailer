@@ -17,6 +17,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { COLORS, FONTS } from "@/constants";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 interface Props {
   onChangeText: (text: string) => void;
@@ -26,6 +28,7 @@ interface Props {
 const SearchInput = ({ onChangeText, text, placeholder }: Props) => {
   const router = useRouter();
   const { top } = useSafeAreaInsets();
+  const { settings } = useSettingsStore();
 
   const scale = useSharedValue(0);
 
@@ -85,7 +88,10 @@ const SearchInput = ({ onChangeText, text, placeholder }: Props) => {
               alignItems: "center",
               borderRadius: 35,
             }}
-            onPress={() => {
+            onPress={async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
               router.back();
             }}
           >
@@ -131,8 +137,10 @@ const SearchInput = ({ onChangeText, text, placeholder }: Props) => {
               onChangeText={onChangeText}
             />
             <TouchableOpacity
-              style={{}}
-              onPress={() => {
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
                 onChangeText("");
                 Keyboard.dismiss();
                 textInputRef.current?.blur();

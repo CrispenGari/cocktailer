@@ -15,6 +15,8 @@ import {
 import SearchInput from "@/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useSearchTermsStore } from "@/store/searchTerms";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 LogBox.ignoreLogs;
 LogBox.ignoreAllLogs();
@@ -64,6 +66,7 @@ const RootLayout = () => {
   const router = useRouter();
   const { new: isNew } = useNewUserStore();
   const { query, update } = useSearchTermsStore();
+  const { settings } = useSettingsStore();
   React.useEffect(() => {
     if (!isNew) {
       router.replace("/(tabs)");
@@ -106,6 +109,77 @@ const RootLayout = () => {
           ),
         }}
         name="(modals)/search"
+      />
+
+      <Stack.Screen
+        options={{
+          presentation: Platform.select({
+            ios: "modal",
+            android: "fullScreenModal",
+          }),
+          headerTitleStyle: {
+            fontFamily: FONTS.bold,
+            fontSize: 18,
+            color: COLORS.black,
+          },
+          headerStyle: { backgroundColor: COLORS.primary },
+          headerTitleAlign: "center",
+          navigationBarHidden: true,
+          headerShadowVisible: false,
+          headerShown: true,
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              style={{
+                marginRight: 20,
+              }}
+              activeOpacity={0.7}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                router.back();
+              }}
+            >
+              <Ionicons name="close-outline" size={24} color={COLORS.black} />
+            </TouchableOpacity>
+          ),
+        }}
+        name="(legal)/pp"
+      />
+      <Stack.Screen
+        options={{
+          presentation: Platform.select({
+            ios: "modal",
+            android: "fullScreenModal",
+          }),
+          headerTitleStyle: {
+            fontFamily: FONTS.bold,
+            fontSize: 18,
+            color: COLORS.black,
+          },
+          headerStyle: { backgroundColor: COLORS.primary },
+          headerTitleAlign: "center",
+          navigationBarHidden: true,
+          headerShadowVisible: false,
+          headerShown: true,
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              style={{
+                marginRight: 20,
+              }}
+              activeOpacity={0.7}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                router.back();
+              }}
+            >
+              <Ionicons name="close-outline" size={24} color={COLORS.black} />
+            </TouchableOpacity>
+          ),
+        }}
+        name="(legal)/tnc"
       />
 
       <Stack.Screen
@@ -159,6 +233,9 @@ const RootLayout = () => {
               }}
               activeOpacity={0.7}
               onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
                 router.back();
               }}
             >

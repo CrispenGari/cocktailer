@@ -11,6 +11,7 @@ type TQuery = {
 interface TSearchTermsState {
   query: TQuery;
   update: (q: TQuery) => void;
+  restore: () => void;
 }
 
 export const useSearchTermsStore = create<TSearchTermsState>()(
@@ -18,6 +19,7 @@ export const useSearchTermsStore = create<TSearchTermsState>()(
     (set, _get) => ({
       query: { favorites: "", search: "" },
       update: (q) => set({ ..._get(), query: q }),
+      restore: () => set({ ..._get(), query: { favorites: "", search: "" } }),
     }),
     {
       name: STORAGE_NAMES.SEARCH_TERMS,

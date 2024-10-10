@@ -10,6 +10,8 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import IngredientsBottomSheet from "./BottomSheets/IngredientsBottomSheet";
 import { useRouter } from "expo-router";
 import CocktailGlass from "./CocktailGlass";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 export const FavoriteCocktail = ({
   cocktail,
@@ -29,11 +31,15 @@ export const FavoriteCocktail = ({
   const ingredientsBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const [liked, setLiked] = React.useState(false);
   const { add, favorites, remove } = useFavoritesStore();
+  const { settings } = useSettingsStore();
   React.useEffect(() => {
     const foundInLikes = favorites.find((l) => l.name === cocktail.name);
     setLiked(!!foundInLikes);
   }, [favorites, cocktail]);
-  const likeOrUnlike = () => {
+  const likeOrUnlike = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     if (liked) {
       remove(cocktail);
     } else {
@@ -51,7 +57,10 @@ export const FavoriteCocktail = ({
         padding: 10,
         borderRadius: 10,
       }}
-      onPress={() => {
+      onPress={async () => {
+        if (settings.haptics) {
+          await onImpact();
+        }
         router.push({
           pathname: "/(modals)/[cocktail]",
           params: {
@@ -110,7 +119,12 @@ export const FavoriteCocktail = ({
         </Text>
       </View>
       <Text
-        onPress={() => ingredientsBottomSheetRef.current?.present()}
+        onPress={async () => {
+          if (settings.haptics) {
+            await onImpact();
+          }
+          ingredientsBottomSheetRef.current?.present();
+        }}
         style={{
           textDecorationLine: "underline",
           fontFamily: FONTS.bold,
@@ -158,6 +172,7 @@ const Cocktail = ({
       ? [cocktail.colors[0], cocktail.colors[0]]
       : cocktail.colors;
 
+  const { settings } = useSettingsStore();
   const ingredientsBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const [liked, setLiked] = React.useState(false);
   const { add, favorites, remove } = useFavoritesStore();
@@ -165,7 +180,10 @@ const Cocktail = ({
     const foundInLikes = favorites.find((l) => l.name === cocktail.name);
     setLiked(!!foundInLikes);
   }, [favorites, cocktail]);
-  const likeOrUnlike = () => {
+  const likeOrUnlike = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     if (liked) {
       remove(cocktail);
     } else {
@@ -188,7 +206,10 @@ const Cocktail = ({
           width: 300,
           height: 380,
         }}
-        onPress={() => {
+        onPress={async () => {
+          if (settings.haptics) {
+            await onImpact();
+          }
           router.push({
             pathname: "/(modals)/[cocktail]",
             params: {
@@ -308,7 +329,12 @@ const Cocktail = ({
 
           {cocktail.glass_and_ingredients.ingredients.length > 3 ? (
             <Text
-              onPress={() => ingredientsBottomSheetRef.current?.present()}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                ingredientsBottomSheetRef.current?.present();
+              }}
               style={{
                 textDecorationLine: "underline",
                 fontFamily: FONTS.bold,
@@ -461,11 +487,15 @@ export const ListCocktail = ({ cocktail }: { cocktail: TCocktail }) => {
 
   const [liked, setLiked] = React.useState(false);
   const { add, favorites, remove } = useFavoritesStore();
+  const { settings } = useSettingsStore();
   React.useEffect(() => {
     const foundInLikes = favorites.find((l) => l.name === cocktail.name);
     setLiked(!!foundInLikes);
   }, [favorites, cocktail]);
-  const likeOrUnlike = () => {
+  const likeOrUnlike = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     if (liked) {
       remove(cocktail);
     } else {
@@ -481,7 +511,10 @@ export const ListCocktail = ({ cocktail }: { cocktail: TCocktail }) => {
         padding: 10,
         borderRadius: 5,
       }}
-      onPress={() => {
+      onPress={async () => {
+        if (settings.haptics) {
+          await onImpact();
+        }
         router.push({
           pathname: "/(modals)/[cocktail]",
           params: {

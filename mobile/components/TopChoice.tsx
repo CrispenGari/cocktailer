@@ -7,9 +7,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import cocktails from "@/assets/data/cocktails.json";
 import { useRouter } from "expo-router";
+import { useSettingsStore } from "@/store/settingsStore";
+import { onImpact } from "@/utils";
 const shuffledCocktails = cocktails.sort(() => Math.random() - 0.5);
 const TopChoice = () => {
   const { favorites } = useFavoritesStore();
+  const { settings } = useSettingsStore();
   const router = useRouter();
   const cocktail = favorites.length === 0 ? shuffledCocktails[0] : favorites[0];
   const colors =
@@ -20,7 +23,10 @@ const TopChoice = () => {
       : cocktail.colors;
   return (
     <TouchableOpacity
-      onPress={() => {
+      onPress={async () => {
+        if (settings.haptics) {
+          await onImpact();
+        }
         router.push({
           pathname: "/(modals)/[cocktail]",
           params: {

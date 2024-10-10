@@ -12,9 +12,12 @@ import { COLORS, FONTS } from "@/constants";
 import { Link } from "expo-router";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import FavoriteSortBottomSheet from "../BottomSheets/FavoriteSortBottomSheet";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 const FavoritesHeader = () => {
   const { top } = useSafeAreaInsets();
+  const { settings } = useSettingsStore();
 
   const sortFavoritesBottomSheetRef = React.useRef<BottomSheetModal>(null);
   return (
@@ -105,7 +108,10 @@ const FavoritesHeader = () => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onPress={() => {
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
                 sortFavoritesBottomSheetRef.current?.present();
               }}
             >

@@ -1,11 +1,9 @@
 import { View, Text, SafeAreaView, Platform } from "react-native";
 import React from "react";
-import { useRouter } from "expo-router";
 import { COLORS } from "@/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const CocktailHeader = ({ cocktail }: { cocktail: string }) => {
-  const router = useRouter();
   const { top } = useSafeAreaInsets();
   return (
     <SafeAreaView

@@ -6,6 +6,8 @@ import { Swipeable } from "react-native-gesture-handler";
 import CocktailGlass from "./CocktailGlass";
 import { useSearchHistoryStore } from "@/store/searchHistoryStore";
 import { useRouter } from "expo-router";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 interface ItemProps {
   cocktail: TCocktail;
@@ -13,6 +15,7 @@ interface ItemProps {
 export const HistoryItem = ({ cocktail }: ItemProps) => {
   const router = useRouter();
   const { add, remove } = useSearchHistoryStore();
+  const { settings } = useSettingsStore();
   const colors =
     typeof cocktail.colors === "string"
       ? [cocktail.colors, cocktail.colors]
@@ -20,14 +23,20 @@ export const HistoryItem = ({ cocktail }: ItemProps) => {
       ? [cocktail.colors[0], cocktail.colors[0]]
       : cocktail.colors;
 
-  const openAndAddToHistory = () => {
+  const openAndAddToHistory = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     add(cocktail);
     router.push({
       pathname: "/(modals)/[cocktail]",
       params: { cocktail: cocktail.name },
     });
   };
-  const removeFromHistory = () => {
+  const removeFromHistory = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     remove(cocktail);
   };
   return (
@@ -105,6 +114,7 @@ export const HistoryItem = ({ cocktail }: ItemProps) => {
 export const ResultItem = ({ cocktail }: ItemProps) => {
   const { add } = useSearchHistoryStore();
   const router = useRouter();
+  const { settings } = useSettingsStore();
   const colors =
     typeof cocktail.colors === "string"
       ? [cocktail.colors, cocktail.colors]
@@ -112,7 +122,10 @@ export const ResultItem = ({ cocktail }: ItemProps) => {
       ? [cocktail.colors[0], cocktail.colors[0]]
       : cocktail.colors;
 
-  const openAndAddToHistory = () => {
+  const openAndAddToHistory = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     add(cocktail);
     router.push({
       pathname: "/(modals)/[cocktail]",

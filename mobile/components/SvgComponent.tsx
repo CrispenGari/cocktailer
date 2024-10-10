@@ -1,5 +1,5 @@
-import { ColorValue, View } from "react-native";
-import Svg, { Path, LinearGradient, Stop } from "react-native-svg";
+import { ColorValue } from "react-native";
+import Svg, { Path } from "react-native-svg";
 
 type TDim<T> = T extends string ? T : never | number;
 

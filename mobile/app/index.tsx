@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import TypeWriter from "react-native-typewriter";
 import { COLORS, FONTS, remarks } from "@/constants";
@@ -9,10 +9,21 @@ import Animated, {
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNewUserStore } from "@/store/newUserStore";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import HelpBottomSheet from "@/components/BottomSheets/HelpBottomSheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Page = () => {
   const [index, setIndex] = React.useState(0);
   const { toggle } = useNewUserStore();
+  const { settings } = useSettingsStore();
+  const router = useRouter();
+  const helpBottomSheetRef = React.useRef<BottomSheetModal>(null);
+  const { top } = useSafeAreaInsets();
 
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -21,7 +32,10 @@ const Page = () => {
     return () => clearInterval(id);
   }, []);
 
-  const openApp = () => {
+  const openApp = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     toggle();
   };
   return (
@@ -44,6 +58,29 @@ const Page = () => {
         y: 0,
       }}
     >
+      <HelpBottomSheet ref={helpBottomSheetRef} />
+      <TouchableOpacity
+        onPress={async () => {
+          if (settings.haptics) {
+            await onImpact();
+          }
+          helpBottomSheetRef.current?.present();
+        }}
+        style={{
+          width: 40,
+          height: 40,
+          backgroundColor: COLORS.main,
+          borderRadius: 40,
+          justifyContent: "center",
+          alignItems: "center",
+          marginRight: 10,
+          position: "absolute",
+          top: top + 10,
+          right: 10,
+        }}
+      >
+        <Ionicons name="help" size={18} color={COLORS.black} />
+      </TouchableOpacity>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Animated.Image
           entering={ZoomIn}
@@ -118,6 +155,51 @@ const Page = () => {
           source={remarks[index].image}
         />
       </Animated.View>
+
+      <SafeAreaView>
+        <View
+          style={{
+            padding: 20,
+          }}
+        >
+          <Text style={{ fontFamily: FONTS.regular }}>
+            By using our app you are automatically agreeing with our{" "}
+            <Text
+              style={{
+                fontFamily: FONTS.bold,
+                textDecorationLine: "underline",
+              }}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                router.push({
+                  pathname: "/(legal)/tnc",
+                });
+              }}
+            >
+              Terms and Conditions
+            </Text>{" "}
+            and our{" "}
+            <Text
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                router.push({
+                  pathname: "/(legal)/pp",
+                });
+              }}
+              style={{
+                fontFamily: FONTS.bold,
+                textDecorationLine: "underline",
+              }}
+            >
+              Privacy Policy.
+            </Text>
+          </Text>
+        </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };

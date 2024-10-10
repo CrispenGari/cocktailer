@@ -4,6 +4,8 @@ import { cocktails, COLORS, FONTS } from "@/constants";
 import { useSearchTermsStore } from "@/store/searchTerms";
 import { useSearchHistoryStore } from "@/store/searchHistoryStore";
 import { HistoryItem, ResultItem } from "@/components/SearchItem";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 const Page = () => {
   const { query } = useSearchTermsStore();
@@ -12,6 +14,7 @@ const Page = () => {
     results: 11,
   });
   const { searches } = useSearchHistoryStore();
+  const { settings } = useSettingsStore();
   const results = cocktails.filter((c) =>
     c.name.toLowerCase().includes(query.search.trim().toLowerCase())
   );
@@ -66,12 +69,15 @@ const Page = () => {
         {query.search ? (
           results.length > limits.results ? (
             <TouchableOpacity
-              onPress={() =>
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
                 setLimits((s) => ({
                   ...s,
                   results: s.results + 10,
-                }))
-              }
+                }));
+              }}
               style={{ marginVertical: 10, alignSelf: "center" }}
             >
               <Text
@@ -93,12 +99,15 @@ const Page = () => {
           )
         ) : searches.length > limits.history ? (
           <TouchableOpacity
-            onPress={() =>
+            onPress={async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
               setLimits((s) => ({
                 ...s,
                 history: s.history + 10,
-              }))
-            }
+              }));
+            }}
             style={{ marginVertical: 10, alignSelf: "center" }}
           >
             <Text

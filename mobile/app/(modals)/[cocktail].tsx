@@ -14,6 +14,8 @@ import CocktailGlass from "@/components/CocktailGlass";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { TCocktail } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 const Page = () => {
   const { cocktail: name } = useLocalSearchParams<{
@@ -33,6 +35,7 @@ const Page = () => {
 
   const [liked, setLiked] = React.useState(false);
   const { add, favorites, remove } = useFavoritesStore();
+  const { settings } = useSettingsStore();
 
   React.useEffect(() => {
     if (cocktail) {
@@ -41,7 +44,10 @@ const Page = () => {
     }
   }, [favorites, cocktail]);
 
-  const likeOrUnlike = () => {
+  const likeOrUnlike = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
     if (!!!cocktail) return;
     if (liked) {
       remove(cocktail as TCocktail);

@@ -3,9 +3,12 @@ import React from "react";
 import { COLORS, FONTS } from "@/constants";
 import cocktails from "@/assets/data/cocktails.json";
 import { ListCocktail } from "./Cocktail";
+import { onImpact } from "@/utils";
+import { useSettingsStore } from "@/store/settingsStore";
 
 const Browse = () => {
   const [limit, setLimit] = React.useState(11);
+  const { settings } = useSettingsStore();
   return (
     <View style={{ padding: 10, gap: 3 }}>
       <View style={{ marginBottom: 15 }}>
@@ -27,7 +30,12 @@ const Browse = () => {
 
       {cocktails.length > limit ? (
         <TouchableOpacity
-          onPress={() => setLimit((l) => l + 10)}
+          onPress={async () => {
+            if (settings.haptics) {
+              await onImpact();
+            }
+            setLimit((l) => l + 10);
+          }}
           style={{ marginVertical: 10, alignSelf: "center" }}
         >
           <Text
